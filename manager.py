@@ -46,19 +46,12 @@ def getinterview(data):
    for i in range(3,len(data)):
       interview[data[i][0]] = round(((data[i][1]+data[i][2]+data[i][3]+data[i][4]+data[i][5])/50)*100,2)
 
-#t1 = input("Please Enter the location of the Term 1 scores ODS file:")
-#t2 = input("Please Enter the location of the Term 2 scores ODS file:")
-#t3 = input("Please Enter the location of the Term 3 scores ODS file:")
-#t4 = input("Please Enter the location of the Term 4 scores ODS file:")
-#ielts = input("Please Enter the location of the IELTS scores ODS file:")
-#interview = input("Please Enter the location of the Interview scores ODS file:")
-
-t1 = "Data1.ods"
-t2 = "Data2.ods"
-t3 = "Data3.ods"
-t4 = "Data4.ods"
-ieltsf = "IELTS.ods"
-interviewf = "Interview.ods"
+t1 = input("Please Enter the location of the Term 1 scores ODS file:") or "Data1.ods"
+t2 = input("Please Enter the location of the Term 2 scores ODS file:") or "Data2.ods"
+t3 = input("Please Enter the location of the Term 3 scores ODS file:") or "Data3.ods"
+t4 = input("Please Enter the location of the Term 4 scores ODS file:") or "Data4.ods"
+ieltsf = input("Please Enter the location of the IELTS scores ODS file:") or "IELTS.ods"
+interviewf = input("Please Enter the location of the Interview scores ODS file:") or "Interview.ods"
 
 try:
    t1d = json.dumps(get_data(t1))
@@ -73,7 +66,8 @@ try:
    ieltsd = json.loads(ieltsd)['Sheet1']
    interviewd = json.dumps(get_data(interviewf))
    interviewd = json.loads(interviewd)['Sheet1']
-except:
+except Exception as e:
+   print(e)
    print("Failed to load ODS File!")
    exit(1)
 
@@ -85,3 +79,6 @@ for name,mark in acadamics.items():
    fresult.add_row([name, mark, ielts[name],interview[name],round(mark+interview[name]+ielts[name],2)])
    
 print(fresult.get_string(sortby=("Total %"), reversesort=True))
+f = open("results.txt","w")
+f.write(fresult.get_string(sortby=("Total %"), reversesort=True))
+f.close() 
